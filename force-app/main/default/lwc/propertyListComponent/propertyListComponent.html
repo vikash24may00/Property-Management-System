@@ -1,0 +1,85 @@
+<!--
+  @description       : 
+  @author            : VIKASH MUNDARI
+  @group             : 
+  @last modified on  : 08-28-2024
+  @last modified by  : VIKASH MUNDARI
+-->
+<template>
+  <lightning-card title="Property Listings">
+      <div class="slds-grid slds-wrap">
+          <!-- Search and Filter Section -->
+          <div class="slds-col slds-size_1-of-3">
+              <lightning-input 
+                  label="Search" 
+                  type="text" 
+                  value={searchTerm} 
+                  onchange={handleInputChange} 
+                  class="slds-m-bottom_small">
+              </lightning-input>
+
+              <lightning-input 
+                  label="Location" 
+                  type="text" 
+                  value={location} 
+                  onchange={handleLocationChange} 
+                  class="slds-m-bottom_small">
+              </lightning-input>
+
+              <lightning-combobox 
+                  label="Property Type" 
+                  placeholder="Select Property Types" 
+                  options={propertyTypeOptions} 
+                  value={selectedPropertyTypes} 
+                  onchange={handleTypeChange} 
+                  multiple>
+              </lightning-combobox>
+
+              <lightning-slider 
+                  label="Price Range" 
+                  value={priceRange} 
+                  min="0" 
+                  max={maxPrice} 
+                  step="1000" 
+                  onchange={handlePriceChange}>
+              </lightning-slider>
+
+              <lightning-button 
+                  label="Search" 
+                  onclick={handleSearch} 
+                  class="slds-m-top_medium">
+              </lightning-button>
+          </div>
+
+          <!-- Property List Section -->
+          <div class="slds-col slds-size_2-of-3">
+              <template if:true={propertyItems}>
+                  <div class="slds-grid slds-wrap slds-gutters">
+                      <template for:each={propertyItems} for:item="property">
+                          <div key={property.Id} class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3 slds-p-around_small">
+                              <lightning-card title={property.Name} icon-name="standard:house">
+                                  <div class="slds-p-around_medium">
+                                      <img src={property.Image__c} alt={property.Name} class="property-image" style="max-width:100%; max-height:200px;">
+                                      <p><b>Location:</b> {property.Location__c}</p>
+                                      <p><b>Type:</b> {property.PropertyType__c}</p>
+                                      <p><b>Price:</b> <lightning-formatted-number value={property.Price__c} format-style="currency" currency-code="USD"></lightning-formatted-number></p>
+                                  </div>
+                              </lightning-card>
+                          </div>
+                      </template>
+                  </div>
+              </template>
+              <template if:true={loading}>
+                  <div class="slds-m-around_medium slds-text-align_center">
+                      <lightning-spinner alternative-text="Loading" size="large"></lightning-spinner>
+                  </div>
+              </template>
+              <template if:true={error}>
+                  <div class="slds-m-around_medium slds-text-align_center">
+                      <p class="slds-text-color_error">{error}</p>
+                  </div>
+              </template>
+          </div>
+      </div>
+  </lightning-card>
+</template>
