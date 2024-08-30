@@ -2,9 +2,46 @@
   @description       : 
   @author            : VIKASH MUNDARI
   @group             : 
-  @last modified on  : 08-28-2024
+  @last modified on  : 08-29-2024
   @last modified by  : VIKASH MUNDARI
 -->
 <template>
-    <p>hey</p>
+  <lightning-card title="Tenant Dashboard">
+    <div class="slds-p-around_medium">
+      <!-- Lease Details Section -->
+      <template if:true={lease}>
+        <h2>Lease Details</h2>
+        <p>
+          <strong>Property:</strong>
+          <template if:true={lease.Property__r}>
+            {lease.Property__r.Name}
+          </template>
+        </p>
+        <p>
+          <strong>Location:</strong>
+          <template if:true={lease.Property__r}>
+            {lease.Property__r.Location__c}
+          </template>
+        </p>
+        <p><strong>Lease Start Date:</strong> {lease.Start_Date__c}</p>
+        <p><strong>Lease End Date:</strong> {lease.End_Date__c}</p>
+        <p><strong>Rent Amount:</strong> {lease.Rent_Amount__c}</p>
+        <p><strong>Lease Status:</strong> {lease.Status__c}</p>
+      </template>
+
+      <!-- Maintenance Requests Section -->
+      <template if:true={maintenanceRequests}>
+        <h2>Maintenance Requests</h2>
+        <ul>
+          <template for:each={maintenanceRequests} for:item="request">
+            <li key={request.Id}>
+              <p><strong>Date:</strong> {request.Request_Date__c}</p>
+              <p><strong>Status:</strong> {request.Status__c}</p>
+              <p><strong>Description:</strong> {request.Description__c}</p>
+            </li>
+          </template>
+        </ul>
+      </template>
+    </div>
+  </lightning-card>
 </template>

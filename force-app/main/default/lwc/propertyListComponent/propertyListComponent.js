@@ -1,67 +1,54 @@
-import { LightningElement, wire } from 'lwc';
-import getPropertyItems from '@salesforce/apex/PropertyController.getPropertyItems';
-import searchPropertyItems from '@salesforce/apex/PropertyController.searchPropertyItems';
+import { LightningElement, track } from 'lwc';
+import getPropertyList from '@salesforce/apex/PropertyController.getPropertyList';
 
-export default class propertyListComponent extends LightningElement {
-    propertyItems;
-    error;
-    loading = false;
-    searchTerm = '';
-    location = '';
-    selectedPropertyTypes = [];
-    priceRange = 99999;
-    maxPrice = 99999; // Define the maximum price range based on your data
+export default class PropertyListing extends LightningElement {
+    @track location = '';
+    @track Type = '';
+
+    @track priceRange = 1000000; // Default to max price
+    @track properties;
+    @track error;
+
     propertyTypeOptions = [
-        { label: 'Apartment', value: 'Apartment' },
-        { label: 'House', value: 'House' },
-        { label: 'Condo', value: 'Condo' }
+        { label: 'Commercial', value: 'Commercial' },
+        { label: 'Residential', value: 'Residential' }
     ];
 
-    @wire(getPropertyItems)
-    wiredPropertyItems(result) {
-        this.wiredPropertyItemsResult = result;
-        if (result.data) {
-            this.propertyItems = result.data;
-            this.error = undefined;
-        } else if (result.error) {
-            this.error = result.error;
-            this.propertyItems = undefined;
-        }
-    }
 
-    handleInputChange(event) {
-        this.searchTerm = event.target.value;
-        this.search();
+
+    connectedCallback() {
+        this.fetchProperties(); // Fetch properties on initialization
     }
 
     handleLocationChange(event) {
         this.location = event.target.value;
-        this.search();
     }
 
-    handleTypeChange(event) {
-        this.selectedPropertyTypes = event.detail.value;
-        this.search();
+    handlePropertyTypeChange(event) {
+        this.Type = event.detail.value;
     }
 
-    handlePriceChange(event) {
+    handlePriceRangeChange(event) {
         this.priceRange = event.target.value;
-        this.search();
     }
 
     handleSearch() {
-        this.loading = true;
-        searchPropertyItems({ searchKeywords: this.searchTerm, location: this.location, propertyTypes: this.selectedPropertyTypes, maxPrice: this.priceRange })
+        this.fetchProperties(); // Fetch properties with current filters
+    }
+
+    fetchProperties() {
+        getPropertyList({ location: this.location, Type: this.Type, priceRange: this.priceRange })
             .then(result => {
-                this.propertyItems = result;
+                this.properties = result;
                 this.error = undefined;
             })
             .catch(error => {
                 this.error = error;
-                this.propertyItems = undefined;
-            })
-            .finally(() => {
-                this.loading = false;
+                this.properties = undefined;
             });
     }
+
+
+   
 }
+
