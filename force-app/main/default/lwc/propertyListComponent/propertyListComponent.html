@@ -2,7 +2,7 @@
   @description       : 
   @author            : VIKASH MUNDARI
   @group             : 
-  @last modified on  : 08-31-2024
+  @last modified on  : 09-01-2024
   @last modified by  : VIKASH MUNDARI
 -->
   
@@ -74,10 +74,9 @@
           </template>
       </div>
   </lightning-card>
-</template>
- -->
+</template> -->
 
- 
+
  <template>
     <lightning-card title="Property Listing">
         <div class="slds-m-around_medium">
@@ -89,7 +88,6 @@
                 class="slds-m-bottom_small">
             </lightning-input>
   
-            <!-- Property Type Checkboxes -->
             <div class="slds-m-bottom_small">
                 <label>Property Type</label>
                 <template for:each={computedPropertyTypes} for:item="option">
@@ -156,7 +154,6 @@
         </div>
     </lightning-card>
   
-    <!-- Modal for Editing -->
     <template if:true={isEditModalOpen}>
         <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open">
             <div class="slds-modal__container">
@@ -186,7 +183,6 @@
         <div class="slds-backdrop slds-backdrop_open"></div>
     </template>
   
-    <!-- Modal for Deleting -->
     <template if:true={isDeleteModalOpen}>
         <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open">
             <div class="slds-modal__container">
@@ -205,4 +201,4 @@
         </section>
         <div class="slds-backdrop slds-backdrop_open"></div>
     </template>
-</template>
+</template>  

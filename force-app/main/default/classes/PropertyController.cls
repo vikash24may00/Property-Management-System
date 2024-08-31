@@ -2,7 +2,7 @@
  * @description       : 
  * @author            : VIKASH MUNDARI
  * @group             : 
- * @last modified on  : 08-31-2024
+ * @last modified on  : 09-01-2024
  * @last modified by  : VIKASH MUNDARI
 **/
 
@@ -49,7 +49,7 @@ public with sharing class PropertyController {
     public static List<Property__c> getPropertyList(String location, List<String> types, Decimal priceRange) {
         String locationSearch = location + '%'; // This will match any property location that starts with the input
 
-        String query = 'SELECT Id, Name, Location__c, Type__c, Price__c FROM Property__c WHERE Price__c <= :priceRange';
+        String query = 'SELECT Id, Name, Location__c, Type__c, Price__c,Description__c FROM Property__c ';
         
         if (location != null && location != '') {
             query += ' AND Location__c LIKE :locationSearch';

@@ -9,7 +9,7 @@ public class MaintenanceNotificationService {
             Messaging.SingleEmailMessage mail = new Messaging.SingleEmailMessage();
             mail.setToAddresses(new String[] { tenant.Contact_Info__c });
             mail.setSubject('Upcoming Maintenance Notification');
-            mail.setPlainTextBody('Dear ' + tenant.Name + ',\n\nThis is a reminder that you have an upcoming maintenance task scheduled.');
+            mail.setPlainTextBody('Dear ' + tenant.Name + ',\n\nThis is a reminder that you have an upcoming maintenance task scheduled tommorow.');
             emails.add(mail);
         }
         

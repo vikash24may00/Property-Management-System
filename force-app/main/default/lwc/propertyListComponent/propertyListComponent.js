@@ -199,3 +199,4 @@ export default class PropertyListing extends LightningElement {
         this.dispatchEvent(event);
     }
 }
+

@@ -4,7 +4,8 @@ public class MaintenanceNotificationScheduler implements Schedulable {
         Date tomorrow = Date.today().addDays(1);
         
         // Query maintenance requests scheduled for tomorrow and are open
-        List<Maintenance_Request__c> requests = [SELECT Tenant__c FROM Maintenance_Request__c WHERE Request_Date__c = :tomorrow AND Status__c = 'Open'];
+        List<Maintenance_Request__c> requests = [SELECT Tenant__c FROM Maintenance_Request__c WHERE Request_Date__c = :tomorrow AND Status__c = 'Open' AND Approval_Status__c = 'Approved'
+];
         
         Set<Id> tenantIds = new Set<Id>();
         for (Maintenance_Request__c request : requests) {
@@ -19,7 +20,7 @@ public class MaintenanceNotificationScheduler implements Schedulable {
     
     // Method to schedule the batch job
     public static void scheduleMaintenanceNotificationJob() {
-        String cronExpression = '0 01 7 * * ?'; // Schedule to run daily at 8:00 AM
+        String cronExpression = '0 09 22 * * ?'; // Schedule to run daily at 8:00 AM
         System.schedule('Daily Maintenance Notification Job', cronExpression, new MaintenanceNotificationScheduler());
     }
 }
