@@ -1,3 +1,10 @@
+/**
+ * @description       : 
+ * @author            : VIKASH MUNDARI
+ * @group             : 
+ * @last modified on  : 08-31-2024
+ * @last modified by  : VIKASH MUNDARI
+**/
 public class MaintenanceRequestTriggerHandler {
     public static void updatePropertyStatusToUnderMaintenance(List<Maintenance_Request__c> maintenanceRequests) {
         Set<Id> propertyIds = new Set<Id>();

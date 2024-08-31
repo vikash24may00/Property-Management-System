@@ -2,11 +2,11 @@
   @description       : 
   @author            : VIKASH MUNDARI
   @group             : 
-  @last modified on  : 08-29-2024
+  @last modified on  : 08-31-2024
   @last modified by  : VIKASH MUNDARI
 -->
   
-
+<!-- 
 <template>
   <lightning-card title="Property Listing">
       <div class="slds-m-around_medium">
@@ -53,9 +53,13 @@
                       <div key={property.Id} class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3 slds-p-around_small">
                           <lightning-card title={property.Name} icon-name="standard:house">
                               <div class="slds-p-around_medium">
+                                <div class="slds-text-align_center">
+                                    <img src={property.Image__c} alt={property.Name} class="property-image" style="max-width:100%; max-height:200px;">
+                                </div>
                                   <p><b>Location:</b> {property.Location__c}</p>
                                   <p><b>Type:</b> {property.Type__c}</p>
                                   <p><b>Price:</b> <lightning-formatted-number value={property.Price__c} format-style="currency" currency-code="INR"></lightning-formatted-number></p>
+                                  <p><b>Description:</b> {property.Description__c}</p>
                               </div>
                           </lightning-card>
                       </div>
@@ -71,7 +75,134 @@
       </div>
   </lightning-card>
 </template>
-
-
+ -->
 
  
+ <template>
+    <lightning-card title="Property Listing">
+        <div class="slds-m-around_medium">
+            <lightning-input
+                label="Location"
+                type="text"
+                value={location}
+                onchange={handleLocationChange}
+                class="slds-m-bottom_small">
+            </lightning-input>
+  
+            <!-- Property Type Checkboxes -->
+            <div class="slds-m-bottom_small">
+                <label>Property Type</label>
+                <template for:each={computedPropertyTypes} for:item="option">
+                    <lightning-input
+                        key={option.value}
+                        type="checkbox"
+                        label={option.label}
+                        value={option.value}
+                        checked={option.isChecked}
+                        onchange={handlePropertyTypeChange}>
+                    </lightning-input>
+                </template>
+            </div>
+  
+            <lightning-slider
+                label="Price Range"
+                min="10000"
+                max="1000000"
+                value={priceRange}
+                step="10000"
+                onchange={handlePriceRangeChange}
+                class="slds-m-bottom_small">
+            </lightning-slider>
+  
+            <lightning-button
+                label="Search"
+                onclick={handleSearch}
+                class="slds-m-bottom_small">
+            </lightning-button>
+  
+            <lightning-button
+                label="Clear"
+                onclick={handleClearFilters}
+                class="slds-m-bottom_small">
+            </lightning-button>
+  
+            <template if:true={properties}>
+                <div class="slds-grid slds-wrap slds-gutters">
+                    <template for:each={properties} for:item="property">
+                        <div key={property.Id} class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3 slds-p-around_small">
+                            <lightning-card title={property.Name} icon-name="standard:house">
+                                <div class="slds-p-around_medium">
+                                    <div class="slds-text-align_center">
+                                        <img src={property.Image__c} alt={property.Name} class="property-image" style="max-width:100%; max-height:200px;">
+                                    </div>
+                                    <p><b>Location:</b> {property.Location__c}</p>
+                                    <p><b>Type:</b> {property.Type__c}</p>
+                                    <p><b>Price:</b> <lightning-formatted-number value={property.Price__c} format-style="currency" currency-code="INR"></lightning-formatted-number></p>
+                                    <p><b>Description:</b> {property.Description__c}</p>
+                                    <lightning-button label="Edit" onclick={handleEdit} data-id={property.Id}></lightning-button>
+                                    <lightning-button label="Delete" onclick={handleDelete} data-id={property.Id}></lightning-button>
+                                </div>
+                            </lightning-card>
+                        </div>
+                    </template>
+                </div>
+            </template>
+  
+            <template if:true={error}>
+                <div class="slds-text-color_error">
+                    {error}
+                </div>
+            </template>
+        </div>
+    </lightning-card>
+  
+    <!-- Modal for Editing -->
+    <template if:true={isEditModalOpen}>
+        <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <lightning-button icon-name="utility:close" onclick={closeEditModal} alternative-text="Close" class="slds-modal__close"></lightning-button>
+                    <h2 class="slds-text-heading_medium">Edit Property</h2>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium">
+                    <lightning-input label="Name" value={editProperty.Name} onchange={handleEditChange} data-field="Name"></lightning-input>
+                    <lightning-input label="Location" value={editProperty.Location__c} onchange={handleEditChange} data-field="Location__c"></lightning-input>
+                    <lightning-combobox 
+                        label="Type" 
+                        value={editProperty.Type__c} 
+                        onchange={handleEditChange} 
+                        data-field="Type__c"
+                        options={propertyTypeOptions}>
+                    </lightning-combobox>
+                    <lightning-input label="Price" type="number" value={editProperty.Price__c} onchange={handleEditChange} data-field="Price__c"></lightning-input>
+                    <lightning-textarea label="Description" value={editProperty.Description__c} onchange={handleEditChange} data-field="Description__c"></lightning-textarea>
+                </div>
+                <footer class="slds-modal__footer">
+                    <lightning-button label="Cancel" onclick={closeEditModal}></lightning-button>
+                    <lightning-button label="Save" variant="brand" onclick={saveEdit}></lightning-button>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+  
+    <!-- Modal for Deleting -->
+    <template if:true={isDeleteModalOpen}>
+        <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <lightning-button icon-name="utility:close" onclick={closeDeleteModal} alternative-text="Close" class="slds-modal__close"></lightning-button>
+                    <h2 class="slds-text-heading_medium">Delete Property</h2>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium">
+                    <p>Are you sure you want to delete this property?</p>
+                </div>
+                <footer class="slds-modal__footer">
+                    <lightning-button label="Cancel" onclick={closeDeleteModal}></lightning-button>
+                    <lightning-button label="Delete" variant="destructive" onclick={confirmDelete}></lightning-button>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+</template>

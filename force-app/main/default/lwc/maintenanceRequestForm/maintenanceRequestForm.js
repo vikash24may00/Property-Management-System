@@ -8,3 +8,4 @@ export default class MaintenanceRequestForm extends LightningElement {
         // Optionally, show a success message or redirect the user
     }
 }
+

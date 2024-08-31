@@ -2,46 +2,42 @@
   @description       : 
   @author            : VIKASH MUNDARI
   @group             : 
-  @last modified on  : 08-29-2024
+  @last modified on  : 08-31-2024
   @last modified by  : VIKASH MUNDARI
 -->
 <template>
-  <lightning-card title="Tenant Dashboard">
-    <div class="slds-p-around_medium">
+  <lightning-card title="Tenant Dashboard" icon-name="standard:account">
       <!-- Lease Details Section -->
-      <template if:true={lease}>
-        <h2>Lease Details</h2>
-        <p>
-          <strong>Property:</strong>
-          <template if:true={lease.Property__r}>
-            {lease.Property__r.Name}
-          </template>
-        </p>
-        <p>
-          <strong>Location:</strong>
-          <template if:true={lease.Property__r}>
-            {lease.Property__r.Location__c}
-          </template>
-        </p>
-        <p><strong>Lease Start Date:</strong> {lease.Start_Date__c}</p>
-        <p><strong>Lease End Date:</strong> {lease.End_Date__c}</p>
-        <p><strong>Rent Amount:</strong> {lease.Rent_Amount__c}</p>
-        <p><strong>Lease Status:</strong> {lease.Status__c}</p>
-      </template>
+      <lightning-layout>
+          <lightning-layout-item flexibility="auto">
+              <lightning-card title="Lease Details" icon-name="standard:opportunity">
+                  <template if:true={leaseDetails}>
+                      <ul class="slds-list_horizontal slds-m-around_medium">
+                          <li class="slds-item">
+                              <p><strong>Property Name:</strong> {leaseDetails.PropertyName}</p>
+                          </li>
+                          <li class="slds-item">
+                              <p><strong>Start Date:</strong> {leaseDetails.StartDate}</p>
+                          </li>
+                          <li class="slds-item">
+                              <p><strong>End Date:</strong> {leaseDetails.EndDate}</p>
+                          </li>
+                          <li class="slds-item">
+                              <p><strong>Rent Amount:</strong> {leaseDetails.RentAmount}</p>
+                          </li>
+                      </ul>
+                  </template>
+              </lightning-card>
+          </lightning-layout-item>
+      </lightning-layout>
 
-      <!-- Maintenance Requests Section -->
-      <template if:true={maintenanceRequests}>
-        <h2>Maintenance Requests</h2>
-        <ul>
-          <template for:each={maintenanceRequests} for:item="request">
-            <li key={request.Id}>
-              <p><strong>Date:</strong> {request.Request_Date__c}</p>
-              <p><strong>Status:</strong> {request.Status__c}</p>
-              <p><strong>Description:</strong> {request.Description__c}</p>
-            </li>
-          </template>
-        </ul>
-      </template>
-    </div>
+      <!-- Maintenance Request Count Chart -->
+      <lightning-layout>
+          <lightning-layout-item flexibility="auto">
+              <lightning-card title="Maintenance Requests" icon-name="standard:case">
+                  <canvas class="maintenance-chart" lwc:dom="manual"></canvas>
+              </lightning-card>
+          </lightning-layout-item>
+      </lightning-layout>
   </lightning-card>
 </template>
