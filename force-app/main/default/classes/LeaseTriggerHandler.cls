@@ -1,3 +1,10 @@
+/**
+ * @description       : 
+ * @author            : VIKASH MUNDARI
+ * @group             : 
+ * @last modified on  : 09-01-2024
+ * @last modified by  : VIKASH MUNDARI
+**/
 public class LeaseTriggerHandler {
     public static void updatePropertyStatus(List<Lease__c> leases) {
         // Collect Property Ids from Leases
@@ -64,7 +71,7 @@ public class LeaseTriggerHandler {
         // Create and send the email
         Messaging.SingleEmailMessage email = new Messaging.SingleEmailMessage();
         email.setToAddresses(adminEmails);
-                system.debug(adminEmails);
+        System.debug(adminEmails);
         email.setSubject(subject);
         email.setPlainTextBody(body);
         Messaging.sendEmail(new Messaging.SingleEmailMessage[] { email });

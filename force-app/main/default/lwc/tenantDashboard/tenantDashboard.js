@@ -1,44 +1,67 @@
-import { LightningElement, api, wire } from 'lwc';
+
+
+
+import { LightningElement, api, wire, track } from 'lwc';
 import { loadScript } from 'lightning/platformResourceLoader';
-import CHARTJS from '@salesforce/resourceUrl/ChartJS'; // If using static resource
+import { refreshApex } from '@salesforce/apex';
+import CHARTJS from '@salesforce/resourceUrl/ChartJS';
 import getTenantData from '@salesforce/apex/TenantRecordDashboardController.getTenantData';
 
 export default class TenantRecordDashboard extends LightningElement {
     @api recordId; // Tenant record ID
+    @track leaseDetails = [];
+    @track maintenanceRequestCount;
     chartInitialized = false;
-    leaseDetails;
-    maintenanceRequestCount;
+    chart;
+    refreshInterval;
+
+    leaseColumns = [
+        { label: 'Property Name', fieldName: 'PropertyName' },
+        { label: 'Start Date', fieldName: 'StartDate', type: 'date' },
+        { label: 'End Date', fieldName: 'EndDate', type: 'date' },
+        { label: 'Rent Amount', fieldName: 'RentAmount', type: 'currency' }
+    ];
+
+    wiredTenantResult;
 
     @wire(getTenantData, { tenantId: '$recordId' })
-    wiredTenantData({ error, data }) {
-        if (data) {
-            this.leaseDetails = data.leaseDetails;
-            this.maintenanceRequestCount = data.maintenanceRequestCount;
-            this.renderMaintenanceChart();
-        } else if (error) {
-            console.error('Error fetching tenant data:', error);
+    wiredTenantData(result) {
+        this.wiredTenantResult = result;
+        if (result.data) {
+            this.leaseDetails = [result.data.leaseDetails];
+            this.maintenanceRequestCount = result.data.maintenanceRequestCount;
+
+            if (this.chartInitialized) {
+                this.updateChart();
+            }
+        } else if (result.error) {
+            console.error('Error fetching tenant data:', result.error);
         }
     }
 
     renderedCallback() {
-        if (this.chartInitialized) {
-            return;
-        }
-        this.chartInitialized = true;
+        if (!this.chartInitialized) {
+            this.chartInitialized = true;
 
-        loadScript(this, CHARTJS)
-            .then(() => {
-                this.renderMaintenanceChart();
-            })
-            .catch(error => {
-                console.error('Error loading Chart.js:', error);
-            });
+            loadScript(this, CHARTJS)
+                .then(() => {
+                    this.renderMaintenanceChart();
+                })
+                .catch(error => {
+                    console.error('Error loading Chart.js:', error);
+                });
+        }
+
+        // Start the periodic refresh if not already started
+        if (!this.refreshInterval) {
+            this.startPeriodicRefresh();
+        }
     }
 
     renderMaintenanceChart() {
-        if (this.maintenanceRequestCount && this.chartInitialized) {
+        if (this.maintenanceRequestCount !== undefined && this.chartInitialized) {
             const ctx = this.template.querySelector('canvas.maintenance-chart').getContext('2d');
-            new Chart(ctx, {
+            this.chart = new window.Chart(ctx, {
                 type: 'bar',
                 data: {
                     labels: ['Maintenance Requests'],
@@ -59,6 +82,33 @@ export default class TenantRecordDashboard extends LightningElement {
                     }
                 }
             });
+        }
+    }
+
+    updateChart() {
+        if (this.chart && this.maintenanceRequestCount !== undefined) {
+            this.chart.data.datasets[0].data = [this.maintenanceRequestCount];
+            this.chart.update(); // Update the chart with new data
+        }
+    }
+
+    refreshData() {
+        refreshApex(this.wiredTenantResult)
+            .then(() => {
+                this.updateChart();
+            });
+    }
+
+    startPeriodicRefresh() {
+        this.refreshInterval = setInterval(() => {
+            this.refreshData();
+        }, 2000); // Refresh every 10 seconds (adjust as needed)
+    }
+
+    disconnectedCallback() {
+        // Clear the interval when the component is destroyed
+        if (this.refreshInterval) {
+            clearInterval(this.refreshInterval);
         }
     }
 }

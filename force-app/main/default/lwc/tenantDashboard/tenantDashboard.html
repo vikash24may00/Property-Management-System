@@ -2,42 +2,36 @@
   @description       : 
   @author            : VIKASH MUNDARI
   @group             : 
-  @last modified on  : 08-31-2024
+  @last modified on  : 09-01-2024
   @last modified by  : VIKASH MUNDARI
 -->
-<template>
-  <lightning-card title="Tenant Dashboard" icon-name="standard:account">
-      <!-- Lease Details Section -->
-      <lightning-layout>
-          <lightning-layout-item flexibility="auto">
-              <lightning-card title="Lease Details" icon-name="standard:opportunity">
-                  <template if:true={leaseDetails}>
-                      <ul class="slds-list_horizontal slds-m-around_medium">
-                          <li class="slds-item">
-                              <p><strong>Property Name:</strong> {leaseDetails.PropertyName}</p>
-                          </li>
-                          <li class="slds-item">
-                              <p><strong>Start Date:</strong> {leaseDetails.StartDate}</p>
-                          </li>
-                          <li class="slds-item">
-                              <p><strong>End Date:</strong> {leaseDetails.EndDate}</p>
-                          </li>
-                          <li class="slds-item">
-                              <p><strong>Rent Amount:</strong> {leaseDetails.RentAmount}</p>
-                          </li>
-                      </ul>
-                  </template>
-              </lightning-card>
-          </lightning-layout-item>
-      </lightning-layout>
 
-      <!-- Maintenance Request Count Chart -->
-      <lightning-layout>
-          <lightning-layout-item flexibility="auto">
-              <lightning-card title="Maintenance Requests" icon-name="standard:case">
-                  <canvas class="maintenance-chart" lwc:dom="manual"></canvas>
-              </lightning-card>
-          </lightning-layout-item>
-      </lightning-layout>
-  </lightning-card>
+
+<template>
+    <lightning-card title="Tenant Dashboard" icon-name="standard:account">
+        <!-- Lease Details Section -->
+        <lightning-layout>
+            <lightning-layout-item flexibility="auto">
+                <lightning-card title="Lease Details" icon-name="standard:opportunity">
+                    <template if:true={leaseDetails}>
+                        <lightning-datatable
+                            key-field="id"
+                            data={leaseDetails}
+                            columns={leaseColumns}
+                            hide-checkbox-column
+                        ></lightning-datatable>
+                    </template>
+                </lightning-card>
+            </lightning-layout-item>
+        </lightning-layout>
+  
+        <!-- Maintenance Request Count Chart -->
+        <lightning-layout>
+            <lightning-layout-item flexibility="auto">
+                <lightning-card title="Maintenance Requests" icon-name="standard:case">
+                    <canvas class="maintenance-chart" lwc:dom="manual"></canvas>
+                </lightning-card>
+            </lightning-layout-item>
+        </lightning-layout>
+    </lightning-card>
 </template>

@@ -1,58 +1,3 @@
-// import { LightningElement, track } from 'lwc';
-// import getPropertyList from '@salesforce/apex/PropertyController.getPropertyList';
-
-// export default class PropertyListing extends LightningElement {
-//     @track location = '';
-//     @track Type = '';
-//     @track Discription = '';
-//     // @track Image = '';
-
-//     @track priceRange = 1000000; // Default to max price
-//     @track properties;
-//     @track error;
-
-//     propertyTypeOptions = [
-//         { label: 'Commercial', value: 'Commercial' },
-//         { label: 'Residential', value: 'Residential' }
-//     ];
-
-
-
-//     connectedCallback() {
-//         this.fetchProperties(); // Fetch properties on initialization
-//     }
-
-//     handleLocationChange(event) {
-//         this.location = event.target.value;
-//     }
-
-//     handlePropertyTypeChange(event) {
-//         this.Type = event.detail.value;
-//     }
-
-//     handlePriceRangeChange(event) {
-//         this.priceRange = event.target.value;
-//     }
-
-//     handleSearch() {
-//         this.fetchProperties(); // Fetch properties with current filters
-//     }
-
-//     fetchProperties() {
-//         getPropertyList({ location: this.location, Type: this.Type, priceRange: this.priceRange })
-//             .then(result => {
-//                 this.properties = result;
-//                 this.error = undefined;
-//             })
-//             .catch(error => {
-//                 this.error = error;
-//                 this.properties = undefined;
-//             });
-//     }
-
-
-   
-// }
 
 
 import { LightningElement, track, wire } from 'lwc';
@@ -65,7 +10,7 @@ import { refreshApex } from '@salesforce/apex';
 export default class PropertyListing extends LightningElement {
     @track location = '';
     @track selectedTypes = [];
-    @track priceRange = 1000000;
+    @track priceRange = 999999999;
     @track properties;
     @track error;
     wiredProperties;
@@ -126,7 +71,7 @@ export default class PropertyListing extends LightningElement {
     handleClearFilters() {
         this.location = '';
         this.selectedTypes = [];
-        this.priceRange = 1000000;
+        this.priceRange = 999999999;
         this.handleSearch(); // Trigger search with cleared filters
         // refreshApex(this.wiredProperties); // Refresh the property list when filters are cleared
     }
