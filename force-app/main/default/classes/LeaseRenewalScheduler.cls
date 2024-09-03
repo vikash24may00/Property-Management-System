@@ -6,7 +6,7 @@ public class LeaseRenewalScheduler implements Schedulable {
     
     // Method to schedule the batch job
     public static void scheduleLeaseRenewalBatch() {
-        String cronExpression = '0 12 23 * * ?'; // Schedule to run at 11:02 PM every day
+        String cronExpression = '0 38 8 * * ?';
         System.schedule('Daily Lease Renewal Batch', cronExpression, new LeaseRenewalScheduler());
     }
 }

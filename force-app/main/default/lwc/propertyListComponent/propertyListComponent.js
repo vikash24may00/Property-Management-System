@@ -10,7 +10,7 @@ import { refreshApex } from '@salesforce/apex';
 export default class PropertyListing extends LightningElement {
     @track location = '';
     @track selectedTypes = [];
-    @track priceRange = 999999999;
+    @track priceRange = 800000;
     @track properties;
     @track error;
     wiredProperties;
@@ -71,7 +71,7 @@ export default class PropertyListing extends LightningElement {
     handleClearFilters() {
         this.location = '';
         this.selectedTypes = [];
-        this.priceRange = 999999999;
+        this.priceRange = 800000;
         this.handleSearch(); // Trigger search with cleared filters
         // refreshApex(this.wiredProperties); // Refresh the property list when filters are cleared
     }

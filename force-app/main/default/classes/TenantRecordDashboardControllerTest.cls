@@ -1,9 +1,16 @@
+/**
+ * @description       : 
+ * @author            : VIKASH MUNDARI
+ * @group             : 
+ * @last modified on  : 09-03-2024
+ * @last modified by  : VIKASH MUNDARI
+**/
 @isTest
 public class TenantRecordDashboardControllerTest {
     @isTest
     static void testGetTenantData() {
         // Create a tenant
-        Tenant__c tenant = new Tenant__c(Name = 'John Doe', Contact_Info__c = 'john.doe@example.com');
+        Tenant__c tenant = new Tenant__c(Name = 'vikash mundari', Contact_Info__c = 'vikash@test.com');
         insert tenant;
 
         // Create a lease
