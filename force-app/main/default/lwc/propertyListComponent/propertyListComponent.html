@@ -2,7 +2,7 @@
   @description       : 
   @author            : VIKASH MUNDARI
   @group             : 
-  @last modified on  : 09-01-2024
+  @last modified on  : 09-03-2024
   @last modified by  : VIKASH MUNDARI
 -->
 
@@ -60,17 +60,17 @@
                         <div key={property.Id} class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3 slds-p-around_small">
                             <lightning-card title={property.Name} icon-name="standard:house">
                                 <div class="slds-p-around_medium">
-                                    <div class="slds-text-align_center">
+                                    <!-- <div class="slds-text-align_center">
                                         <img src={property.Image__c} alt={property.Name} class="property-image" style="max-width:100%; max-height:200px;">
 
-                                    </div>
+                                    </div> -->
                                     <p><b>Location:</b> {property.Location__c}</p>
                                     <p><b>Type:</b> {property.Type__c}</p>
                                     <p><b>Price:</b> <lightning-formatted-number value={property.Price__c} format-style="currency" currency-code="INR"></lightning-formatted-number></p>
                                     <p><b>Description:</b> {property.Description__c}</p>
-                                    <lightning-button label="Edit" onclick={handleEdit} data-id={property.Id}></lightning-button> &nbsp;
-                                    <lightning-button label="Delete" onclick={handleDelete} data-id={property.Id}></lightning-button>
-                                </div>
+                                    <!-- <lightning-button label="Edit" onclick={handleEdit} data-id={property.Id}></lightning-button> &nbsp;
+                                    <lightning-button label="Delete" onclick={handleDelete} data-id={property.Id}></lightning-button> -->
+                                </div> 
                             </lightning-card>
                         </div>
                     </template>

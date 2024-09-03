@@ -1,8 +1,15 @@
+/**
+ * @description       : 
+ * @author            : VIKASH MUNDARI
+ * @group             : 
+ * @last modified on  : 09-03-2024
+ * @last modified by  : VIKASH MUNDARI
+**/
 public class MaintenanceNotificationService {
     @future(callout=false)
     public static void sendMaintenanceNotification(Set<Id> tenantIds) 
     {
-        // Query the Tenant records based on the provided tenant IDs
+        // Query the Tenant records 
         List<Tenant__c> tenants = [SELECT Id, Name, Contact_Info__c FROM Tenant__c WHERE Id IN :tenantIds];
         
         // List to hold the email messages that will be sent
@@ -24,6 +31,7 @@ public class MaintenanceNotificationService {
             // Add the email message to the list of emails to be sent
             emails.add(mail);
         }
+    
         
         // Check if there are any emails to be sent
         if (!emails.isEmpty()) {
