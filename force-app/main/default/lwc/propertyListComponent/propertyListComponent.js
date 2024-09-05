@@ -1,5 +1,3 @@
-
-
 import { LightningElement, track, wire } from 'lwc';
 import getPropertyList from '@salesforce/apex/PropertyController.getPropertyList';
 import deleteProperty from '@salesforce/apex/PropertyController.deleteProperty';
@@ -83,7 +81,7 @@ export default class PropertyListing extends LightningElement {
     }
 
     handleSearch() {
-        // console.log('search button worked');
+        console.log('search button worked');
         refreshApex(this.wiredProperties); // Refresh the property list based on current filters
     }
 

@@ -2,14 +2,14 @@
   @description       : 
   @author            : VIKASH MUNDARI
   @group             : 
-  @last modified on  : 09-01-2024
+  @last modified on  : 09-04-2024
   @last modified by  : VIKASH MUNDARI
 -->
 
-
+<!-- 
 <template>
     <lightning-card title="Tenant Dashboard" icon-name="standard:account">
-        <!-- Lease Details Section -->
+
         <lightning-layout>
             <lightning-layout-item flexibility="auto">
                 <lightning-card title="Lease Details" icon-name="standard:opportunity">
@@ -25,7 +25,7 @@
             </lightning-layout-item>
         </lightning-layout>
   
-        <!-- Maintenance Request Count Chart -->
+
         <lightning-layout>
             <lightning-layout-item flexibility="auto">
                 <lightning-card title="Maintenance Requests" icon-name="standard:case">
@@ -33,5 +33,60 @@
                 </lightning-card>
             </lightning-layout-item>
         </lightning-layout>
+    </lightning-card>
+</template> -->
+
+
+
+<template>
+    <lightning-card title="Tenant Dashboard" icon-name="standard:account">
+        <!-- Tenant Search Section -->
+        <lightning-layout style="margin-left: 9px;margin-right: 12px;">
+            <lightning-layout-item flexibility="auto">
+                <lightning-input 
+                    label="Search Tenant" 
+                    placeholder="Enter tenant name..." 
+                    value={searchKey} 
+                    onchange={handleSearchKeyChange}>
+                </lightning-input> <br>
+                <lightning-button 
+                    label="Search" 
+                    onclick={handleTenantSearch} 
+                    class="slds-m-top_small">
+                </lightning-button>
+            </lightning-layout-item>
+        </lightning-layout>
+
+        <!-- Display Tenant Info or "Tenant Not Found" Message -->
+        <template if:true={tenantSelected}>
+            <!-- Lease Details Section -->
+            <lightning-layout>
+                <lightning-layout-item flexibility="auto">
+                    <lightning-card title="Lease Details" icon-name="standard:opportunity">
+                        <template if:true={leaseDetails}>
+                            <lightning-datatable
+                                key-field="id"
+                                data={leaseDetails}
+                                columns={leaseColumns}
+                                hide-checkbox-column>
+                            </lightning-datatable>
+                        </template>
+                    </lightning-card>
+                </lightning-layout-item>
+            </lightning-layout>
+          
+            <!-- Maintenance Request Count Chart -->
+            <lightning-layout>
+                <lightning-layout-item flexibility="auto">
+                    <lightning-card title="Maintenance Requests" icon-name="standard:case">
+                        <canvas class="maintenance-chart" lwc:dom="manual"></canvas>
+                    </lightning-card>
+                </lightning-layout-item>
+            </lightning-layout>
+        </template>
+
+        <template if:true={showTenantNotFoundMessage}>
+            <p class="slds-text-color_error">Tenant not found.</p>
+        </template>
     </lightning-card>
 </template>
